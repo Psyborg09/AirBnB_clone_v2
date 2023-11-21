@@ -46,7 +46,7 @@ class HBNBCommand(cmd.Cmd):
         if class_name not in classes:
             print("** class doesn't exist **")
             return
-        
+
         try:
             instance = eval(class_name)()
         except Exception as e:
@@ -62,7 +62,7 @@ class HBNBCommand(cmd.Cmd):
             if len(key_value) == 2:
                 key, raw_value = key_value[0], key_value[1]
                 if raw_value.startswith('"') and raw_value.endswith('"'):
-                    value = raw_value[1:-1].replace('_', ' ').replace('\\"', '"')
+                    value = raw_value[1:-1].replace('_', ' ')
                 elif '.' in raw_value:
                     try:
                         value = float(raw_value)
@@ -77,7 +77,6 @@ class HBNBCommand(cmd.Cmd):
                 last_processed_value = value
         instance.save()
         print(instance.id)
-
 
     def do_show(self, args):
         """this command prints the string representation of an instance
