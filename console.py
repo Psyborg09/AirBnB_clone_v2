@@ -34,18 +34,60 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """This command creates a new instance of BaseModel,
-           saves it (to the JSON file)
+          Command syntax: create <Class name> <param 1> <param 2> <param 3>
+          saves it (to the JSON file)
            and prints the id
         """
-        args = args.split()
-        if len(args) == 0:
+        args_list = args.split()
+        class_name = args_list[0]
+        print(f"Args: {args}")
+        print(f"Class Name: {class_name}")
+        print(f"Args List: {args_list}")
+        if len(args_list) < 2:
             print("** class name missing **")
-        elif args[0] not in classes:
+            return
+        if class_name not in classes:
             print("** class doesn't exist **")
-        else:
-            instance = eval(args[0])()
-            instance.save()
-            print(instance.id)
+            return
+        
+        try:
+            instance = eval(class_name)()
+        except Exception as e:
+            print(f"Error creating instance: {e}")
+            return
+        last_processed_value = None
+        key = ""
+        value = ""
+        params = ' '.join(args_list[1:])
+        param_list = [param.strip() for param in params.split()]
+        for param in param_list:
+            key_value = param.split('=')
+            print(f"param: {param}, key_value: {key_value}")
+            if len(key_value) == 2:
+                key, raw_value = key_value[0], key_value[1]
+                print(f"Processing param: {param}")
+                print(f"Before processing - key: {key}, value: {raw_value}")
+                if raw_value.startswith('"') and raw_value.endswith('"'):
+                    value = raw_value[1:-1].replace('_', ' ').replace('\\"', '"')
+                elif '.' in raw_value:
+                    try:
+                        value = float(raw_value)
+                    except ValueError:
+                        continue
+                else:
+                    try:
+                        value = int(raw_value)
+                    except ValueError:
+                        continue
+                setattr(instance, key, value)
+                last_processed_value = value
+                print("Parameter: {}, Value: {}".format(key, value))
+        print("Instance before saving:", instance.__dict__)
+        instance.save()
+        print(instance.id)
+        print("real value{}".format(last_processed_value))
+        print("final Parameter: {}, Value: {}".format(key, value))
+
 
     def do_show(self, args):
         """this command prints the string representation of an instance
