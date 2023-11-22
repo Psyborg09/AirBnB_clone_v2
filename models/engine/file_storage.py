@@ -44,7 +44,6 @@ class FileStorage():
                 new_obj = json.load(file)
                 for value in new_obj.values():
                     loaded_object = eval(value["__class__"])(**value)
-                    print("Loaded object:", loaded_object)
                     self.new(loaded_object)
         except FileNotFoundError:
             pass
@@ -52,9 +51,5 @@ class FileStorage():
     def delete(self, obj=None):
         if obj is not None:
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
-            print("Deleting key:", key)
             if key in self.__objects:
                 del self.__objects[key]
-                print("Object deleted successfully")  # Add this line for debugging
-        else:
-            print("Key not found in __objects. Object not deleted.")  # Add this line for debugging
