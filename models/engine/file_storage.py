@@ -15,7 +15,7 @@ class FileStorage():
         if cls:
             return {k: v for k, v in self.__objects.items() if isinstance(v, cls)}
         else:
-            return self.__objects
+            return self.__objects.values()
 
 
     def new(self, obj):
@@ -49,7 +49,12 @@ class FileStorage():
             pass
 
     def delete(self, obj=None):
+        """
+        Delete the given object from the storage.
+        """
         if obj is not None:
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
             if key in self.__objects:
                 del self.__objects[key]
+        if obj in self.__objects.values():
+            self.__objects.pop(obj)
