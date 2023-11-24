@@ -39,6 +39,7 @@ class HBNBCommand(cmd.Cmd):
            and prints the id
         """
         from models import storage
+        from models.base_model import BaseModel
         args_list = args.split()
         class_name = args_list[0]
         if len(args_list) < 2:
@@ -192,4 +193,5 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
+    from models import storage
     HBNBCommand().cmdloop()
