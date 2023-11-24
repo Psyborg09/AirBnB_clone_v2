@@ -38,6 +38,7 @@ class HBNBCommand(cmd.Cmd):
           saves it (to the JSON file)
            and prints the id
         """
+        from models import storage
         args_list = args.split()
         class_name = args_list[0]
         if len(args_list) < 2:
