@@ -2,7 +2,7 @@
 """This module defines a class `State`"""
 
 from models.base_model import BaseModel
-
+import models
 
 class State(BaseModel):
     '''Defines a State'''
