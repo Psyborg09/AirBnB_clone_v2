@@ -9,9 +9,11 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+import shlex
+import models
 
-classes = ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]
-
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 class HBNBCommand(cmd.Cmd):
     """This command defines the entry point of the command interpreter"""
@@ -117,20 +119,26 @@ class HBNBCommand(cmd.Cmd):
                 del(storage.all()[instance_key])
                 storage.save()
 
-    def do_all(self, args):
+    def do_all(self, arg):
         """Prints all string representation of all instances based or
             not on the class name
         """
-        args = args.split()
+        args = shlex.split(arg)
+        obj_list = []
         if len(args) == 0:
-            for obj in storage.all().values():
-                print(obj)
-        elif args[0] not in classes:
-            print("** class doesn't exist **")
-        else:
-            for key in storage.all():
-                if key.startswith(args[0]):
-                    print(storage.all()[key])
+            obj_dict = models.storage.all()
+        if len(args) == 1:
+            class_name = args[0]
+            if class_name in classes:
+                obj_dict = models.storage.all(classes[class_name])
+            else:
+                print("** class doesn't exist **")
+                return False
+        for key in obj_dict:
+            obj_list.append(str(obj_dict[key]))
+        print("[", end="")
+        print(", ".join(obj_list), end="")
+        print("]")
 
     def do_update(self, args):
         """Updates an instance based on the class name and id
