@@ -12,7 +12,7 @@ class Amenity(BaseModel, Base):
     if models.storage_t == 'db':
         __tablename__ = 'amenities'
         name = Column(String(128), nullable=False)
-   
+
     else:
         name = ""
 
@@ -25,5 +25,5 @@ class Amenity(BaseModel, Base):
         state_dict = self.__dict__.copy()
         # Remove the '_sa_instance_state' attribute
         state_dict.pop('_sa_instance_state', None)
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, state_dict)
-
+        return "[{}] ({}) {}".format(self.__class__.__name__,
+                                     self.id, state_dict)
