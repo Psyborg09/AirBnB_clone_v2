@@ -6,7 +6,7 @@ from sqlalchemy import Column, String, ForeignKey, Integer, Float
 from models import storage_t
 import models
 from sqlalchemy.orm import relationship
-
+from models.review import Review
 
 class Place(BaseModel, Base):
     '''Defines a Place'''
@@ -22,6 +22,7 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
+        reviews = relationship("Review", backref="place", cascade="all, delete-orphan")
 
     else:
         city_id = ""
@@ -35,6 +36,17 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+    
+    if models.storage_t != 'db':
+        @property
+        def reviews(self):
+            """getter attribute returns the list of Review instances"""
+            review_list = []
+            all_reviews = models.storage.all(Review)
+            for review in all_reviews.values():
+                if review.place_id == self.id:
+                    review_list.append(review)
+            return review_list
 
     def __str__(self):
         """Return the string representation of the object."""

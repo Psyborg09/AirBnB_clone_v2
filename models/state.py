@@ -7,6 +7,7 @@ from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from models.city import City
 from models import storage_t
+from models.engine.file_storage import FileStorage
 
 class State(BaseModel, Base):
     '''Defines a State'''
