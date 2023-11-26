@@ -54,9 +54,6 @@ class FileStorage():
         '''
         Delete the given object from the storage.
         '''
-        if obj is not None:
-            key = "{}.{}".format(obj.__class__.__name__, obj.id)
-            if key in self.__objects:
-                del self.__objects[key]
-        if obj in self.__objects.values():
-            self.__objects.pop(obj)
+        if obj:
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        del self.__objects[key]
