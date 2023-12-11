@@ -7,7 +7,14 @@ sudo apt-get -y install nginx
 sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
 sudo touch /data/web_static/releases/test/index.html
-echo "Hello, this is a test." | sudo tee /data/web_static/releases/test/index.html
+echo "<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <p>Nginx server test</p>
+  </body>
+</html>" | tee /data/web_static/releases/test/index.html
 # Create symbolic link
 sudo rm -f /data/web_static/current
 sudo ln -s /data/web_static/releases/test/ /data/web_static/current
@@ -15,5 +22,5 @@ sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 # Update Nginx configuration
 nginx_config="/etc/nginx/sites-available/default"
-sudo sed -i "/^server_name _;/a location /hbnb_static/ { alias /data/web_static/current/; }" $nginx_config
+sudo sed -i '39 i\ \tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}\n' $nginx_config
 sudo service nginx restart
