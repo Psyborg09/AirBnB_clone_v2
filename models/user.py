@@ -38,4 +38,3 @@ class User(BaseModel, Base):
         # Remove the '_sa_instance_state' attribute
         state_dict.pop('_sa_instance_state', None)
         return "[{}] ({}) {}".format(self.__class__.__name__, self.id, state_dict)
-

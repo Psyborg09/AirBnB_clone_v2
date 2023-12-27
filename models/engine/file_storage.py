@@ -51,9 +51,18 @@ class FileStorage():
             pass
 
     def delete(self, obj=None):
-        '''
+        """
         Delete the given object from the storage.
-        '''
-        if obj:
-        key = "{}.{}".format(type(obj).__name__, obj.id)
-        del self.__objects[key]
+        """
+        if obj is not None:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            if key in self.__objects:
+                del self.__objects[key]
+
+        # Check if obj is in the values of __objects
+        if obj in self.__objects.values():
+            # Find and remove the first occurrence of obj in values
+            key_to_remove = next(
+                k for k, v in self.__objects.items() if v == obj
+            )
+            del self.__objects[key_to_remove]
